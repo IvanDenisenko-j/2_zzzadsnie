@@ -13,3 +13,26 @@
 .completed {
     text-decoration: line-through;
 }
+.title{
+    text-align: center;
+    display: flex;
+
+
+}
+.column{
+    text-align: center;
+}
+.card{
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: linear-gradient(#FFCCE5, #FFCCE5 0) padding-box,
+    linear-gradient(to right, rgb(255, 198, 198), rgb(256, 0, 0)) border-box;
+    transition: 0.2s linear;
+}
+.card:hover{
+    border-radius: 5px;
+    border: 5px solid transparent;
+    background: linear-gradient(#E5CCFF, #E5CCFF 0) padding-box,
+    linear-gradient(to right, rgb(156, 186, 256), rgb(0, 77, 255)) border-box;
+
+}
