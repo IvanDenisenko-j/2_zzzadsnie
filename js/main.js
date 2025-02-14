@@ -2,9 +2,9 @@ new Vue({
     el: '#app',
     data: {
         columns: [
-            { cards: [] }, // Первый столбец
-            { cards: [] }, // Второй столбец
-            { cards: [] }  // Третий столбец
+            {cards: []}, // Первый столбец
+            {cards: []}, // Второй столбец
+            {cards: []}  // Третий столбец
         ]
     },
     created() {
@@ -18,10 +18,10 @@ new Vue({
                 for (let i = 0; i < 3; i++) {
                     const itemText = prompt(`Введите текст пункта ${i + 1}:`);
                     if (itemText) {
-                        items.push({ text: itemText, completed: false });
+                        items.push({text: itemText, completed: false});
                     }
                 }
-                this.columns[columnIndex].cards.push({ title, items });
+                this.columns[columnIndex].cards.push({title, items});
                 this.saveData();
             }
         },
@@ -56,6 +56,14 @@ new Vue({
                 });
             }
             return false;
+        },
+        canAddCard(index) {
+            if (index === 0) {
+                return this.columns[0].cards.length < 3; // Максимум 3 карточки в первом столбце
+            } else if (index === 1) {
+                return this.columns[1].cards.length < 5; // Максимум 5 карточек во втором столбце
+            }
+            return true; // В третьем столбце нет ограничений
         },
         saveData() {
             localStorage.setItem('noteAppData', JSON.stringify(this.columns));
