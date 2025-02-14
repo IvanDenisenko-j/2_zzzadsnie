@@ -22,7 +22,7 @@
                 <ul>
                     <li v-for="(item, itemIndex) in card.items" :key="itemIndex">
                         <input type="checkbox" v-model="item.completed" @change="updateCard(card)">
-                        <input type="text" v-model="item.text" placeholder="Пункт списка" />
+                        <input type="text" v-model="item.text" placeholder="Пункт списка." />
                     </li>
                 </ul>
                 <button @click="removeCard(card.id)">Удалить</button>
