@@ -64,5 +64,29 @@ new Vue({
                 if (completionRate > 0.5 && this.columns[0].cards.includes(card)) {
                     this.moveCard(card, 1); // Перемещение во второй столбец
                 } else if (completionRate === 1 && this.columns[1].cards.includes(card)) {
+                    this.moveCard(card, 2); // Перемещение в третий столбец
+                    card.completedDate = new Date().toLocaleString(); // Установка даты завершения
                 }
-            });
+            }
+            this.saveCards();
+        },
+        moveCard(card, targetColumnIndex) {
+            for (let column of this.columns) {
+                const index = column.cards.findIndex(c => c.id === card.id);
+                if (index !== -1) {
+                    column.cards.splice(index, 1); // Удаление из текущего столбца
+                    this.columns[targetColumnIndex].cards.push(card); // Добавление в целевой столбец
+                    break;
+                }
+            }
+        },
+        addTag(card) {
+            if (card.tag.trim() !== '') {
+                card.tags.push(card.tag.trim());
+                card.tag = ''; // Очистка поля ввода метки
+                this.saveCards();
+            }
+        }
+    }
+
+});
