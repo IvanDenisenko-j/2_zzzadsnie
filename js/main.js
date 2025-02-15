@@ -3,8 +3,6 @@ Vue.component('note-card', {
     template: `
         <div class="card" :style="{ backgroundColor: card.color }">
             <input type="text" v-model="card.title" placeholder="Заголовок карточки" />
-            <label for="colorInput">Цвет:</label>
-            <input type="color" v-model="card.color" />
             <ul>
                 <li v-for="(item, itemIndex) in card.items" :key="itemIndex">
                     <input type="checkbox" v-model="item.completed" @change="updateCard">
