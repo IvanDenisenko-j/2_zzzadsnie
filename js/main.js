@@ -126,10 +126,14 @@ Vue.component('note-app', {
                 const completionRate = completedItems / totalItems; // Рассчитываем процент завершения
 
                 if (completionRate > 0.5 && this.columns[0].cards.includes(card)) {
-                    this.moveCard(card, 1); // Перемещение во второй столбец
+                    if (this.columns[1].cards.length < 5) {
+                        this.moveCard(card, 1); // Перемещение во второй столбец
+                    }
                 } else if (completionRate === 1 && this.columns[1].cards.includes(card)) {
-                    this.moveCard(card, 2); // Перемещение в третий столбец
-                    card.completedDate = new Date().toLocaleString(); // Установка даты завершения
+                    if (this.columns[2].cards.length < 5){
+                        this.moveCard(card, 2); // Перемещение в третий столбец
+                        card.completedDate = new Date().toLocaleString(); // Установка даты завершения
+                    }
                 }
             }
             this.saveCards(); // Сохраняем изменения в localStorage
