@@ -3,8 +3,6 @@ Vue.component('note-card', {
     template: `
         <div class="card" :style="{ backgroundColor: card.color }">
             <input type="text" v-model="card.title" placeholder="Заголовок карточки" />
-            <label for="colorInput">Цвет:</label>
-            <input type="color" v-model="card.color" />
             <ul>
                 <li v-for="(item, itemIndex) in card.items" :key="itemIndex">
                     <input type="checkbox" v-model="item.completed" @change="updateCard">
@@ -24,7 +22,7 @@ Vue.component('note-card', {
     },
     computed: {
         itemCount() {
-            return this.card.items.length; // Количество пунктов в карточке
+            return this.card.items.length; // Количество пунктов в карточке, length
         }
     },
     methods: {
@@ -84,14 +82,15 @@ Vue.component('note-app', {
     },
     methods: {
         loadCards() {
-            const savedData = JSON.parse(localStorage.getItem('cards'));
+            const savedData = JSON.parse(localStorage.getItem('cards')); // JSON.parse преобразование json в js обьект или массив
             if (savedData) {
                 this.columns = savedData.columns;
                 this.nextCardId = savedData.nextCardId;
             }
         },
         saveCards() {
-            localStorage.setItem('cards', JSON.stringify({ columns: this.columns, nextCardId: this.nextCardId }));
+            localStorage.setItem('cards', JSON.stringify({ columns: this.columns, nextCardId: this.nextCardId })); // JSON.stringify обратно JSON.parse, setItem сохранение данных
+            //под ключом 'cards'
         },
         addCard(column) {
             const newCard = {
@@ -112,7 +111,7 @@ Vue.component('note-app', {
             for (let column of this.columns) {
                 const index = column.cards.findIndex(card => card.id === cardId); // Находим индекс карточки
                 if (index !== -1) {
-                    column.cards.splice(index, 1); // Удаляем карточку из колонки
+                    column.cards.splice(index, 1); // Удаляем карточку из колонки, splice изменяет исходный массив и возвращает массив удалённых элементов.
                     this.saveCards(); // Сохраняем изменения в localStorage
                     break; // Выходим из цикла после удаления
                 }
