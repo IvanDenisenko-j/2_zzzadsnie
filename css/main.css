@@ -34,3 +34,7 @@
     linear-gradient(to right, rgb(0, 0, 0), rgb(255, 108, 0)) border-box;
 
 }
+.locked {
+    opacity: 0.5;
+    pointer-events: none;
+}

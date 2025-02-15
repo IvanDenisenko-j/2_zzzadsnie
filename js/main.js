@@ -43,9 +43,9 @@ Vue.component('note-card', {
 });
 
 Vue.component('note-column', {
-    props: ['column'],
+    props: ['column', 'isLocked'],
     template: `
-        <div class="column">
+        <div class="column" :class="{ 'locked': isLocked }">
             <h2>{{ column.title }}</h2>
             <note-card
                 v-for="(card, cardIndex) in column.cards"
@@ -54,7 +54,7 @@ Vue.component('note-column', {
                 @remove-card="$emit('remove-card', $event)"
                 @update-card="$emit('update-card', $event)"
             ></note-card>
-            <button v-if="canAddCard(column)" @click="$emit('add-card', column)">Добавить карточку</button>
+            <button v-if="canAddCard(column) && !isLocked" @click="$emit('add-card', column)">Добавить карточку</button>
         </div>
     `,
     methods: {
@@ -74,11 +74,16 @@ Vue.component('note-app', {
                 { title: 'Столбец 2', cards: [] },
                 { title: 'Столбец 3', cards: [] }
             ],
-            nextCardId: 1
+            nextCardId: 1,
         };
     },
     created() {
         this.loadCards();
+    },
+    computed: {
+        isSecondColumnFull() {
+            return this.columns[1].cards.length >= 5;
+        }
     },
     methods: {
         loadCards() {
@@ -118,21 +123,19 @@ Vue.component('note-app', {
             }
         },
         updateCard(card) {
-            const completedItems = card.items.filter(item => item.completed).length; // Считаем завершенные пункты
-            const totalItems = card.items.length; // Общее количество пунктов
+            const completedItems = card.items.filter(item => item.completed).length;
+            const totalItems = card.items.length;
 
             if (totalItems > 0) {
-                const completionRate = completedItems / totalItems; // Рассчитываем процент завершения
+                const completionRate = completedItems / totalItems;
 
                 if (completionRate > 0.5 && this.columns[0].cards.includes(card)) {
                     if (this.columns[1].cards.length < 5) {
-                        this.moveCard(card, 1); // Перемещение во второй столбец
+                        this.moveCard(card, 1);
                     }
                 } else if (completionRate === 1 && this.columns[1].cards.includes(card)) {
-                    if (this.columns[2].cards.length < 5){
-                        this.moveCard(card, 2); // Перемещение в третий столбец
-                        card.completedDate = new Date().toLocaleString(); // Установка даты завершения
-                    }
+                    this.moveCard(card, 2);
+                    card.completedDate = new Date().toLocaleString();
                 }
             }
             this.saveCards(); // Сохраняем изменения в localStorage
@@ -155,6 +158,7 @@ Vue.component('note-app', {
                     v-for="(column, index) in columns"
                     :key="index"
                     :column="column"
+                    :is-locked="index === 0 && isSecondColumnFull"
                     @remove-card="removeCard"
                     @update-card="updateCard"
                     @add-card="addCard"
